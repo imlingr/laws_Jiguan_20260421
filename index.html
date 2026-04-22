@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌸 吉官的六堂課 | 少年法律溫柔筆記</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Klee+One:wght@400;600&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --sakura: #ffd6e0;
+    --sakura-deep: #f7a8b8;
+    --mint: #c8e6d0;
+    --cream: #fff8f0;
+    --sky: #b8d8e3;
+    --ink: #5a4a52;
+    --gold: #e8b86f;
+  }
+
+  body {
+    font-family: 'Zen Maru Gothic', 'Klee One', 'Noto Serif TC', sans-serif;
+    background: linear-gradient(135deg, #fff8f0 0%, #ffe8ec 50%, #e8f3ed 100%);
+    color: var(--ink);
+    line-height: 1.8;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* 飄落櫻花 */
+  .sakura-fall {
+    position: fixed;
+    top: -50px;
+    pointer-events: none;
+    z-index: 1;
+    animation: fall linear infinite;
+    opacity: 0.7;
+  }
+  @keyframes fall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* 頁首 */
+  header {
+    text-align: center;
+    padding: 80px 20px 60px;
+    position: relative;
+    z-index: 2;
+  }
+  .date-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.6);
+    padding: 6px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    color: var(--sakura-deep);
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+  }
+  h1 {
+    font-family: 'Klee One', serif;
+    font-size: clamp(32px, 6vw, 56px);
+    color: var(--ink);
+    margin-bottom: 15px;
+    letter-spacing: 3px;
+  }
+  h1 .hl {
+    background: linear-gradient(transparent 60%, var(--sakura) 60%);
+    padding: 0 8px;
+  }
+  .subtitle {
+    font-size: 18px;
+    color: #8a7680;
+    margin-bottom: 10px;
+  }
+  .speaker {
+    font-size: 15px;
+    color: #a89090;
+    font-style: italic;
+  }
+
+  /* 導覽列 */
+  nav.chapter-nav {
+    position: sticky;
+    top: 0;
+    background: rgba(255,248,240,0.85);
+    backdrop-filter: blur(15px);
+    padding: 15px 20px;
+    z-index: 100;
+    border-bottom: 1px solid rgba(247,168,184,0.3);
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  nav.chapter-nav ul {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    list-style: none;
+    min-width: max-content;
+    margin: 0 auto;
+  }
+  nav.chapter-nav a {
+    text-decoration: none;
+    color: var(--ink);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    transition: all 0.3s;
+    background: rgba(255,255,255,0.5);
+  }
+  nav.chapter-nav a:hover {
+    background: var(--sakura);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  /* 章節區塊 */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    position: relative;
+    z-index: 2;
+  }
+  .chapter {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 40px 35px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 40px rgba(247,168,184,0.15);
+    border: 1px solid rgba(255,255,255,0.8);
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .chapter.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .chapter::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, var(--sakura) 0%, transparent 70%);
+    opacity: 0.4;
+    border-radius: 50%;
+  }
+
+  .chapter-num {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--sakura-deep), var(--gold));
+    color: #fff;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    letter-spacing: 2px;
+  }
+  .chapter h2 {
+    font-family: 'Klee One', serif;
+    font-size: 26px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .chapter .tag-line {
+    font-size: 14px;
+    color: var(--sakura-deep);
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+  }
+  .chapter p {
+    margin-bottom: 14px;
+    font-size: 16px;
+    color: #6b5a62;
+  }
+  .chapter strong {
+    color: var(--sakura-deep);
+    font-weight: 600;
+    background: linear-gradient(transparent 65%, #fff4c2 65%);
+    padding: 0 3px;
+  }
+
+  /* 互動卡片：展開詳細案例 */
+  .case-card {
+    background: linear-gradient(135deg, #fff5f7, #fef3e7);
+    border-left: 4px solid var(--sakura-deep);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 20px 0;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .case-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 20px rgba(247,168,184,0.25);
+  }
+  .case-card .case-title {
+    font-weight: 600;
+    color: var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .case-card .case-title::after {
+    content: '🌸';
+    transition: transform 0.3s;
+  }
+  .case-card.open .case-title::after {
+    transform: rotate(180deg);
+  }
+  .case-card .case-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, margin-top 0.3s;
+    font-size: 15px;
+    color: #6b5a62;
+  }
+  .case-card.open .case-body {
+    max-height: 500px;
+    margin-top: 12px;
+  }
+
+  /* 金句框 */
+  .quote-box {
+    background: linear-gradient(135deg, rgba(200,230,208,0.4), rgba(184,216,227,0.4));
+    border-radius: 16px;
+    padding: 20px 25px;
+    margin: 25px 0;
+    font-family: 'Klee One', serif;
+    font-size: 17px;
+    color: var(--ink);
+    position: relative;
+    text-align: center;
+  }
+  .quote-box::before, .quote-box::after {
+    content: '"';
+    font-size: 40px;
+    color: var(--sakura-deep);
+    position: absolute;
+    opacity: 0.5;
+  }
+  .quote-box::before { top: -5px; left: 15px; }
+  .quote-box::after { bottom: -25px; right: 15px; }
+
+  /* 對比表格：態度 */
+  .attitude-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 20px 0;
+  }
+  .attitude-box {
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+    transition: transform 0.3s;
+  }
+  .attitude-box:hover { transform: translateY(-5px); }
+  .attitude-box.good {
+    background: linear-gradient(135deg, #d4f0dc, #c8e6d0);
+  }
+  .attitude-box.bad {
+    background: linear-gradient(135deg, #f7d4d4, #f0c2c2);
+  }
+  .attitude-box .icon { font-size: 36px; margin-bottom: 8px; }
+  .attitude-box h4 { margin-bottom: 10px; font-size: 16px; }
+  .attitude-box p { font-size: 14px; margin: 0; }
+
+  @media (max-width: 600px) {
+    .attitude-compare { grid-template-columns: 1fr; }
+    .chapter { padding: 30px 22px; }
+    .chapter h2 { font-size: 21px; }
+  }
+
+  /* 小測驗 */
+  .quiz-section {
+    background: linear-gradient(135deg, #fff0f5, #f0f8ff);
+    border-radius: 24px;
+    padding: 40px 30px;
+    margin-top: 50px;
+    text-align: center;
+  }
+  .quiz-section h3 {
+    font-family: 'Klee One', serif;
+    font-size: 26px;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+  .quiz-q {
+    background: #fff;
+    border-radius: 16px;
+    padding: 25px;
+    margin: 20px 0;
+    text-align: left;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  }
+  .quiz-q p.question { font-weight: 600; margin-bottom: 15px; }
+  .quiz-options button {
+    display: block;
+    width: 100%;
+    padding: 12px 18px;
+    margin: 8px 0;
+    border: 2px solid #f0e0e5;
+    background: #fff;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    text-align: left;
+    transition: all 0.3s;
+  }
+  .quiz-options button:hover {
+    border-color: var(--sakura-deep);
+    background: #fff5f7;
+  }
+  .quiz-options button.correct {
+    background: #d4f0dc;
+    border-color: #6bbf7f;
+  }
+  .quiz-options button.wrong {
+    background: #f7d4d4;
+    border-color: #d96b6b;
+  }
+  .quiz-feedback {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+
+  /* 頁尾 */
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: #a89090;
+    font-size: 13px;
+    position: relative;
+    z-index: 2;
+  }
+  footer .heart { color: var(--sakura-deep); }
+</style>
+</head>
+<body>
+
+<!-- 飄落櫻花（JS 生成） -->
+
+<header>
+  <div class="date-tag">🌸 2026.04.21 (二) · 第 8 次宣講</div>
+  <h1><span class="hl">吉官</span>的六堂課</h1>
+  <p class="subtitle">少年法律的溫柔筆記</p>
+  <p class="speaker">— 吉靜如 調查保護官｜基隆地方法院少年法院 —</p>
+</header>
+
+<nav class="chapter-nav">
+  <ul>
+    <li><a href="#ch1">① 受教權</a></li>
+    <li><a href="#ch2">② 網路痕跡</a></li>
+    <li><a href="#ch3">③ 板主責任</a></li>
+    <li><a href="#ch4">④ 發言代價</a></li>
+    <li><a href="#ch5">⑤ 犯後態度</a></li>
+    <li><a href="#ch6">⑥ 討公道</a></li>
+    <li><a href="#quiz">🌷 小測驗</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- 第一章 -->
+  <section class="chapter" id="ch1">
+    <div class="chapter-num">CHAPTER 01</div>
+    <h2>📚 受教權，是你自己要守護的</h2>
+    <p class="tag-line">— 沒有人能替你保住未來 —</p>
+    <p>吉官來自基隆地方法院少年法院，專門處理 <strong>12 歲以上、未滿 18 歲</strong> 的青少年案件。她提到，最近幾個月關押了非常多八、九年級的學生。</p>
+    <p>她特別強調：「<strong>受教權不是法院要替你考量的，是你自己要顧好的</strong>。」如果因為違法行為影響了就學，後果只能自己承擔。</p>
+    <div class="quote-box">
+      新北某些學校發生重大事件後，你可能覺得「那又不關我的事」——<br>
+      但那些學生的前途，已經真實地被改變了。
+    </div>
+    <p>🌱 <strong>不要期待別人保護你的學習機會，要靠自己的每一個選擇去守護。</strong></p>
+  </section>
+
+  <!-- 第二章 -->
+  <section class="chapter" id="ch2">
+    <div class="chapter-num">CHAPTER 02</div>
+    <h2>🔍 網路不是匿名樂園</h2>
+    <p class="tag-line">— 所有痕跡，都能被追回來 —</p>
+    <p>法院處理的網路案件 <strong>幾乎都是匿名的</strong>，但這不代表無法追查。</p>
+    <div class="case-card" onclick="this.classList.toggle('open')">
+      <div class="case-title">🛰️ 誰能找到你？點擊展開</div>
+      <div class="case-body">
+        <p>・鑑識單位</p>
+        <p>・電信警察隊</p>
+        <p>・市警大科偵隊</p>
+        <p>・電腦鑑識專家</p>
+        <p style="margin-top:10px;">只要留下紀錄，就可能成為日後追究責任的依據。</p>
+      </div>
+    </div>
+    <p>別以為網路是可以隨意發洩、謾罵或參與違法的空間。<strong>你打下的每一個字，都留著指紋。</strong></p>
+  </section>
+
+  <!-- 第三章 -->
+  <section class="chapter" id="ch3">
+    <div class="chapter-num">CHAPTER 03</div>
+    <h2>👥 《靠北敦化》：板主也要一起負責</h2>
+    <p class="tag-line">— 「我只是..." 不能當免責金牌 —</p>
+    <div class="case-card" onclick="this.classList.toggle('open')">
+      <div class="case-title">📖 案例：四位板主的連帶責任</div>
+      <div class="case-body">
+        <p>《靠北敦化》匿名平台上，四位板主若未善盡管理與把關責任，放任版內出現霸凌、嘲諷等不當言論，<strong>四人都需共同承擔連帶責任</strong>。</p>
+        <p style="margin-top:10px;">即使已經訂立版規，也不能只停留在形式——必須實際審查、即時處理違規內容。</p>
+      </div>
+    </div>
+    <p>以下這些想法，<strong>都不能成為免責理由</strong>👇</p>
+    <div class="quote-box">
+      「我只是轉貼」<br>
+      「我只是留言」<br>
+      「我只是加入群組」<br>
+      「我不是主謀」
+    </div>
+    <p>只要有 <strong>參與、附和、散播或協助</strong>，就別以為自己完全沒事。</p>
+  </section>
+
+  <!-- 第四章 -->
+  <section class="chapter" id="ch4">
+    <div class="chapter-num">CHAPTER 04</div>
+    <h2>⏳ 2 分鐘發文，半年道歉</h2>
+    <p class="tag-line">— 甚至可能用整個前途去賠 —</p>
+    <div class="quote-box">
+      發文可能只需要 <strong style="font-size:22px;">2 分鐘</strong>，<br>
+      卻可能要用 <strong>半年、一年，甚至自己的前途</strong> 來道歉。
+    </div>
+    <p>在發表任何言論之前，<strong>請先深呼吸三秒</strong>。不要因為一時衝動，就留下難以挽回的數位足跡。</p>
+    <p>🌼 <strong>懂得自律，才能在未來擁有自由的空間。</strong></p>
+  </section>
+
+  <!-- 第五章 -->
+  <section class="chapter" id="ch5">
+    <div class="chapter-num">CHAPTER 05</div>
+    <h2>💭 犯後態度，比辯解更重要</h2>
+    <p class="tag-line">— 認錯和道歉，是法院最重視的事 —</p>
+    <p>吉官提到台南高等法院的判決案例——<strong>犯後態度會直接影響判決結果</strong>。</p>
+
+    <div class="attitude-compare">
+      <div class="attitude-box good">
+        <div class="icon">🌿</div>
+        <h4>最佳處理方式</h4>
+        <p>立即坦承<br>認錯<br>誠懇道歉</p>
+      </div>
+      <div class="attitude-box bad">
+        <div class="icon">🥀</div>
+        <h4>最差處理方式</h4>
+        <p>死不承認<br>硬拗、閃躲<br>→ 恐遭重判</p>
+      </div>
+    </div>
+
+    <p>很多學生以為可以靠辯解、閃躲來減輕責任，但事實剛好相反。<strong>年紀變大，不會自動讓過去的紀錄消失</strong>。</p>
+    <p>犯錯後要即時面對，不能幻想靠拖延、否認或裝沒事來解決。</p>
+  </section>
+
+  <!-- 第六章 -->
+  <section class="chapter" id="ch6">
+    <div class="chapter-num">CHAPTER 06</div>
+    <h2>⚠️ 找人討公道？你控制得了嗎？</h2>
+    <p class="tag-line">— 沒動手，不代表沒責任 —</p>
+    <p>台灣近年少年犯罪中，女生比例明顯上升——<strong>從過去男生的 1/5，現在已經變成 1/2</strong>。很多女生會找男生去幫忙「討公道」。</p>
+
+    <div class="quote-box">
+      你，有辦法控制他們的行為嗎？
+    </div>
+
+    <div class="case-card" onclick="this.classList.toggle('open')">
+      <div class="case-title">💔 真實的代價：點擊展開</div>
+      <div class="case-body">
+        <p>原本只是想給對方一個教訓——</p>
+        <p>但乾哥、朋友可能帶了武器、刀械，造成重傷害甚至出人命。</p>
+        <p style="margin-top:10px;"><strong>即使你「只是出張嘴抱怨」，一樣要負起責任。</strong></p>
+      </div>
+    </div>
+
+    <p>🌷 不分性別，只要涉入衝突與暴力，都可能付出代價。<strong>沒動手，不等於沒事。</strong></p>
+  </section>
+
+  <!-- 小測驗 -->
+  <section class="quiz-section" id="quiz">
+    <h3>🌷 來個小測驗吧</h3>
+    <p style="color:#8a7680;">檢查自己記住了多少～</p>
+
+    <div class="quiz-q">
+      <p class="question">Q1. 在匿名平台上留言攻擊同學，會被追查到嗎？</p>
+      <div class="quiz-options">
+        <button onclick="checkAns(this, false)">不會，匿名就是安全的</button>
+        <button onclick="checkAns(this, true)">會，透過鑑識與科偵都能還原</button>
+        <button onclick="checkAns(this, false)">只有用本名發文才會被查</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p class="question">Q2. 犯錯後，什麼態度最能減輕判決？</p>
+      <div class="quiz-options">
+        <button onclick="checkAns(this, false)">找理由閃躲、死不承認</button>
+        <button onclick="checkAns(this, false)">拖到成年就沒事了</button>
+        <button onclick="checkAns(this, true)">立即坦承、認錯、誠懇道歉</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-q">
+      <p class="question">Q3. 「我只是轉貼一下」這句話能讓你免責嗎？</p>
+      <div class="quiz-options">
+        <button onclick="checkAns(this, false)">可以，反正不是我寫的</button>
+        <button onclick="checkAns(this, true)">不行，參與、散播、附和都要負責</button>
+        <button onclick="checkAns(this, false)">只要刪掉就沒事</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>🌸 願你在自由中，懂得自律；在青春裡，走得長遠 🌸</p>
+  <p style="margin-top:8px;">Made with <span class="heart">❤</span> · 少年法治教育筆記</p>
+</footer>
+
+<script>
+  // 飄落櫻花
+  function createSakura() {
+    const sakura = document.createElement('div');
+    sakura.className = 'sakura-fall';
+    sakura.innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20">
+      <path d="M10 2 Q13 6, 10 10 Q7 6, 10 2 M2 10 Q6 7, 10 10 Q6 13, 2 10 M18 10 Q14 7, 10 10 Q14 13, 18 10 M10 18 Q7 14, 10 10 Q13 14, 10 18"
+        fill="#f7a8b8" opacity="0.7"/>
+      <circle cx="10" cy="10" r="2" fill="#fff4c2"/>
+    </svg>`;
+    sakura.style.left = Math.random() * 100 + 'vw';
+    sakura.style.animationDuration = (8 + Math.random() * 6) + 's';
+    sakura.style.animationDelay = Math.random() * 2 + 's';
+    document.body.appendChild(sakura);
+    setTimeout(() => sakura.remove(), 15000);
+  }
+  setInterval(createSakura, 800);
+  for (let i = 0; i < 10; i++) setTimeout(createSakura, i * 200);
+
+  // 滾動顯現
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.chapter').forEach(c => observer.observe(c));
+
+  // 平滑捲動
+  document.querySelectorAll('nav a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // 測驗邏輯
+  function checkAns(btn, correct) {
+    const parent = btn.closest('.quiz-q');
+    const feedback = parent.querySelector('.quiz-feedback');
+    parent.querySelectorAll('button').forEach(b => b.disabled = true);
+
+    if (correct) {
+      btn.classList.add('correct');
+      feedback.innerHTML = '🌸 答對了！吉官會為你鼓掌～';
+      feedback.style.background = '#d4f0dc';
+      feedback.style.color = '#3d7a4f';
+    } else {
+      btn.classList.add('wrong');
+      parent.querySelectorAll('button').forEach(b => {
+        if (b.getAttribute('onclick').includes('true')) b.classList.add('correct');
+      });
+      feedback.innerHTML = '🥀 再想想看～正確答案已標示為綠色';
+      feedback.style.background = '#fff0e0';
+      feedback.style.color = '#a86040';
+    }
+    feedback.classList.add('show');
+  }
+</script>
+
+</body>
+</html>
